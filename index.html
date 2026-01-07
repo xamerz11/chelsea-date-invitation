@@ -5,20 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vintage Invitation</title>
 <style>
-/* ---------- BODY ---------- */
 body {
   margin: 0;
-  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  font-family: "Georgia", serif;
   background: #1a1a1a;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   overflow: hidden;
-  perspective: 1200px; /* Needed for 3D flap */
+  perspective: 1200px;
 }
-
-/* ---------- PAGES ---------- */
 .page {
   position: absolute;
   top: 0;
@@ -30,112 +27,66 @@ body {
   align-items: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 1s ease;
+  transition: opacity 0.8s ease;
 }
 .page.active {
   opacity: 1;
   pointer-events: all;
   z-index: 2;
 }
-
-/* ---------- ENVELOPE STACK ---------- */
-#envelope-wrapper {
-  position: relative;
-  width: 320px;
-  height: 200px;
-}
-
-/* Envelope stack for vintage effect */
-.envelope-stack {
-  position: absolute;
-  width: 300px;
-  height: 180px;
-  border-radius: 12px;
-  background: #9b3b2b;
-  border: 2px solid #6e1f14;
-  box-shadow: 0 12px 25px rgba(0,0,0,0.4);
-  top: 0;
-  left: 0;
-  transform: translateY(var(--y, 0px)) scale(var(--s,1));
-  transition: transform 0.4s ease;
-}
-
-/* Main envelope */
 #envelope {
   position: relative;
-  width: 300px;
-  height: 180px;
-  background: #a03d2f;
-  border: 2px solid #6e1f14;
-  border-radius: 12px;
+  width: 420px;
+  height: 280px;
+  background: #8b0000;
+  border: 2px solid #5a0000;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.6);
   cursor: pointer;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.6);
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('https://www.transparenttextures.com/patterns/papyrus.png');
+  background-size: cover;
   transform-style: preserve-3d;
-  z-index: 5;
 }
-#envelope:hover { transform: scale(1.05); }
-
-/* Flap */
 #flap {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 50%;
-  background: #a03d2f;
+  background: #770000;
   clip-path: polygon(0 0, 100% 0, 50% 100%);
   transform-origin: top center;
   transition: transform 1s ease;
-  box-shadow: inset 0 8px 15px rgba(0,0,0,0.3);
-  z-index: 3;
-  transform: rotateX(0deg);
+  z-index: 2;
+  box-shadow: inset 0 5px 15px rgba(0,0,0,0.3);
 }
-
-/* Flap shadow */
 #flap-shadow {
   position: absolute;
   top: 50%;
   left: 0;
   width: 100%;
   height: 50%;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.15);
   opacity: 0;
   transition: opacity 0.5s ease;
   pointer-events: none;
-  z-index: 2;
+  z-index: 1;
 }
-
-/* Stamp */
-.stamp {
-  position: absolute;
-  top: 12%;
-  right: 8%;
-  width: 14%;
-  height: 28%;
-  border-radius: 50%;
-  border: 2px dashed #fff;
-  background: #fff2;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-  z-index: 4;
-}
-
-/* Envelope text */
 #envelope h1 {
-  position: relative;
   color: #fff;
   font-size: 1.3rem;
   text-align: center;
   pointer-events: none;
-  z-index: 4;
-  margin-top: 60px;
+  z-index: 3;
 }
-
-/* ---------- CARD ---------- */
 .card {
-  background: #fff8f0;
+  background: #ffe5e5;
   color: #4b1e0b;
-  border-radius: 15px;
+  border-radius: 12px;
   width: 80vw;
   max-width: 400px;
   padding: 30px;
@@ -144,12 +95,26 @@ body {
   transform: translateY(50px);
   opacity: 0;
   transition: transform 0.8s ease, opacity 0.8s ease;
+  background-image: url('https://www.transparenttextures.com/patterns/papyrus.png');
+  background-size: cover;
+  filter: sepia(0.05) contrast(1.05);
 }
 .card.show {
   transform: translateY(0);
   opacity: 1;
 }
-
+.card h1, .card p, .card img, .card video {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s forwards;
+}
+.card.show h1 { animation-delay: 0.2s; }
+.card.show p { animation-delay: 0.4s; }
+.card.show img { animation-delay: 0.6s; }
+.card.show video { animation-delay:0.6s; }
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
 h1 { font-size: 1.7rem; margin-bottom: 15px; }
 p { font-size: 1rem; line-height: 1.6; margin-bottom: 15px; }
 .btn {
@@ -157,7 +122,7 @@ p { font-size: 1rem; line-height: 1.6; margin-bottom: 15px; }
   border-radius: 25px;
   border: none;
   font-size: 1rem;
-  background: #a03d2f;
+  background: #9b111e;
   color: #fff;
   cursor: pointer;
   margin-top: 15px;
@@ -165,130 +130,215 @@ p { font-size: 1rem; line-height: 1.6; margin-bottom: 15px; }
 }
 .btn:hover { transform: scale(1.05); }
 #noBtn { margin-left: 10px; }
-
+.btn[disabled]{opacity:0.5; cursor:not-allowed;}
 @media(max-width: 500px){
-  #envelope h1 { font-size: 1.2rem; }
   .btn { font-size: 0.9rem; padding: 8px 20px; }
 }
 </style>
 </head>
 <body>
 
-<!-- PAGE 1: ENVELOPE -->
 <section class="page active" id="page1">
-  <div id="envelope-wrapper">
-    <!-- Stacked envelopes for vintage effect -->
-    <div class="envelope-stack" style="--y:8px; --s:0.96;"></div>
-    <div class="envelope-stack" style="--y:16px; --s:0.92;"></div>
-    <div class="envelope-stack" style="--y:24px; --s:0.88;"></div>
-
-    <!-- Main interactive envelope -->
-    <div id="envelope" onclick="openCard()">
-      <div id="flap"></div>
-      <div id="flap-shadow"></div>
-      <div class="stamp"></div>
-      <h1>💌 Click to Open 💌</h1>
-    </div>
+  <div id="envelope" onclick="openEnvelope()">
+    <div id="flap"></div>
+    <div id="flap-shadow"></div>
+    <h1>Click to Open ❤️</h1>
   </div>
 </section>
 
-<!-- PAGE 2: CARD -->
 <section class="page" id="page2">
-  <div class="card" id="card1">
-    <h1>Hi Love 😘</h1>
-    <p>May I take you out on a date? 🌸 I’ve been wanting to share this moment with you, and I hope this will be the start of us choosing each other 💖</p>
-    <button class="btn" onclick="sayYes()">Yes 💕</button>
-    <button class="btn" id="noBtn">No 😅</button>
+  <div class="card" id="cardFeeling">
+    <h1>How are you feeling today?</h1>
+    <button class="btn" onclick="nextPage(3)">Good😊</button>
+    <button class="btn" onclick="nextPage(3)">Not Good😢</button>
   </div>
 </section>
 
-<!-- PAGE 3: CELEBRATION -->
 <section class="page" id="page3">
   <div class="card">
-    <h1>YAAAY 🎉</h1>
-    <p>Thank you for letting me take you out 🥰 I can’t wait to spend this time together ❤️</p>
-    <button class="btn" onclick="nextPage(4)">Next ➡️</button>
+    <h1>Hi Love ❤️</h1>
+    <p>I've been wanting to invite you in a cute way instead of just asking through chat or in person. So I made this little surprise for you! 😘</p>
+    <button class="btn" onclick="nextPage('pageWitty1')">Next</button>
   </div>
 </section>
 
-<!-- PAGE 4: DETAILS -->
-<section class="page" id="page4">
+<section class="page" id="pageWitty1"><div class="card"><p>So... is it a yes or no? 🤔</p></div></section>
+<section class="page" id="pageWitty2"><div class="card"><p>Oh mb, the question hasn't popped in yet 😅</p></div></section>
+<section class="page" id="pageWitty3"><div class="card"><p>So what's your answer? 😏</p></div></section>
+<section class="page" id="pageWitty4"><div class="card"><p>Oh mb wala pa pala hehe 😅</p></div></section>
+<section class="page" id="pageWitty5"><div class="card"><p>Sige na next na talaga!</p></div></section>
+<section class="page" id="pageWitty6"><div class="card"><p>Ayaw? Tara na g na to please 😜</p></div></section>
+
+<section class="page" id="pageWitty7">
   <div class="card">
-    <h1>The Details 📅</h1>
-    <p><strong>Dress code:</strong> White top & blue pants/skirt 👗👔</p>
-    <p><strong>Time:</strong> 4:00 PM ⏰</p>
-    <p><strong>Place:</strong> Roof Manila 🌆</p>
-    <button class="btn" onclick="nextPage(5)">Next ➡️</button>
+    <p>Ah wala parin pala ata 😅 De sunod na tlga legit!</p>
+    <button class="btn" disabled style="opacity:0.5; cursor:not-allowed;">Next</button>
+    <button class="btn" onclick="nextPage('pageWag1')">Wag Na</button>
   </div>
 </section>
 
-<!-- PAGE 5: FINAL MESSAGE -->
+<section class="page" id="pageWag1">
+  <div class="card">
+    <p>lah, ayaw mo?😢</p>
+    <img src="wag1-image.jpg" alt="Wag1" style="width:100%; border-radius:12px; margin-top:15px;">
+    <button class="btn" disabled>Gusto😍</button>
+    <button class="btn" onclick="nextPage('pageWag2')">Ayaw😢</button>
+  </div>
+</section>
+
+<section class="page" id="pageWag2">
+  <div class="card">
+    <p>De sige, wag na ayaw mo e😅</p>
+    <img src="wag2-image.jpg" alt="Wag2" style="width:100%; border-radius:12px; margin-top:15px;">
+    <button class="btn" onclick="nextPage('pageWag3')">Gusto nga😍</button>
+    <button class="btn" onclick="nextPage('pageWag3')">Wag Na😢</button>
+  </div>
+</section>
+
+<section class="page" id="pageWag3">
+  <div class="card">
+    <p>Okay so...</p>
+    <button class="btn" onclick="nextPage(4)">Next</button>
+  </div>
+</section>
+
+<section class="page" id="page4">
+  <div class="card" id="card1">
+    <p>May I take you out on a date? ❤️</p>
+    <button class="btn" onclick="sayYes()">Yes</button>
+    <button class="btn" id="noBtn">No</button>
+  </div>
+</section>
+
 <section class="page" id="page5">
   <div class="card">
-    <h1>Can’t Wait ❤️</h1>
-    <p>I’m excited to see you and spend time together 💕</p>
-    <p>01.11.2026 📅</p>
+    <h1>YAAAY 🎉</h1>
+    <p>Thank you for letting me take you out! I can’t wait to spend this time together.</p>
+    <img src="yay-image.jpg" alt="Celebration" style="width:100%; border-radius:12px; margin-top:15px;">
+    <button class="btn" onclick="nextPage(6)">Next</button>
   </div>
 </section>
 
-<!-- BACKGROUND MUSIC -->
+<section class="page" id="page6">
+  <div class="card">
+    <h1>The Details📅</h1>
+    <p><strong>Dress code:</strong> White & Blue</p>
+    <p><strong>Time:</strong> 4:00 PM</p>
+    <p><strong>Place:</strong> Roof Manila</p>
+    <img src="details-image.jpg" alt="Details" style="width:100%; border-radius:12px; margin-top:15px;">
+    <button class="btn" onclick="nextPage(7)">Next</button>
+  </div>
+</section>
+
+<section class="page" id="page7">
+  <div class="card">
+    <h1>Small Surprise 🎁</h1>
+    <p>I have a little surprise planned for our date! 
+Can’t wait to see your smile ❤️</p>
+    <button class="btn" onclick="nextPage(8)">Next</button>
+  </div>
+</section>
+
+<section class="page" id="page8">
+  <div class="card">
+    <p>If you’re worried about Tito and Tita’s permission, don’t be. I’ll take care of everything. All you need to do is get ready and bring your beautiful self ❤️</p>
+    <button class="btn" onclick="nextPage(9)">Next</button>
+  </div>
+</section>
+
+<section class="page" id="page9">
+  <div class="card">
+    <h1>Thank You ❤️</h1>
+    <p>Thank you for saying yes! I promise this will be an unforgettable day for both of us 💕</p>
+    <button class="btn" onclick="nextPage(10)">Next</button>
+  </div>
+</section>
+
+<section class="page" id="page10">
+  <div class="card">
+    <h1>Can’t Wait ❤️</h1>
+    <video autoplay muted loop playsinline style="width:100%; border-radius:12px; margin-bottom:15px;">
+      <source src="your-video.mp4" type="video/mp4">
+    </video>
+    <p style="font-weight:bold; font-size:1.2rem;">01.11.2026</p>
+    <button class="btn" onclick="nextPage(11)">Next</button>
+  </div>
+</section>
+
+<section class="page" id="page11">
+  <div class="card">
+    <h1>Why “Wishlist”? 🎶</h1>
+    <p>I chose “Wishlist” as the background music because, like the song, it’s about wanting something simple and real—not big gestures or extravagance, just the person you want to share a quiet, meaningful life with.</p>
+    <p>For me, that’s you. I don’t wish for anything complicated. I just want you, and I want to settle things with you—calmly, genuinely, and with intention. ❤️</p>
+  </div>
+</section>
+
 <audio id="bgm" loop>
   <source src="wishlist-instrumental.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 const music = document.getElementById('bgm');
-const flap = document.getElementById('flap');
-const flapShadow = document.getElementById('flap-shadow');
 
-// PAGE TRANSITIONS
+function openEnvelope(){
+  const flap = document.getElementById('flap');
+  const shadow = document.getElementById('flap-shadow');
+  shadow.style.opacity = 1;
+  flap.style.transform = "rotateX(180deg)";
+  fadeInMusic(music,0.5,2000);
+  setTimeout(()=>nextPage(2), 1000);
+}
+
 function nextPage(num){
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const next = document.getElementById('page'+num);
+  const next = typeof num === 'number' ? document.getElementById('page'+num) : document.getElementById(num);
   next.classList.add('active');
   const card = next.querySelector('.card');
   if(card) setTimeout(()=>card.classList.add('show'), 150);
 }
 
-// FADE IN MUSIC
-function fadeInMusic(audio, targetVolume=0.5, duration=2000){
-  audio.volume = 0;
+function fadeInMusic(audio,targetVolume=0.5,duration=2000){
+  audio.volume=0;
   audio.play();
-  const steps = 50;
-  let step = targetVolume / steps;
-  let interval = duration / steps;
-  let i = 0;
-  const fade = setInterval(()=>{
-    if(i<steps){
-      audio.volume = Math.min(audio.volume + step, targetVolume);
-      i++;
-    } else clearInterval(fade);
-  }, interval);
+  const steps=50;
+  const step=targetVolume/steps;
+  const interval=duration/steps;
+  let i=0;
+  const fade=setInterval(()=>{
+    if(i<steps){ audio.volume=Math.min(audio.volume+step,targetVolume); i++; }
+    else clearInterval(fade);
+  },interval);
 }
 
-// OPEN ENVELOPE WITH 3D FLAP
-function openCard(){
-  flapShadow.style.opacity = 1;
-  flap.style.transform = "rotateX(-180deg)"; // flap folds back
-  fadeInMusic(music,0.5,2000);
-  setTimeout(()=>nextPage(2), 900);
+const noBtn=document.getElementById('noBtn');
+if(noBtn){
+  noBtn.addEventListener('mouseenter',()=>{
+    const card=noBtn.parentElement;
+    const maxX=card.offsetWidth-noBtn.offsetWidth-10;
+    const maxY=card.offsetHeight-noBtn.offsetHeight-10;
+    const randomX=Math.random()*maxX;
+    const randomY=Math.random()*maxY;
+    noBtn.style.position='absolute';
+    noBtn.style.left=randomX+'px';
+    noBtn.style.top=randomY+'px';
+  });
 }
 
-// NO BUTTON ESCAPE
-const noBtn = document.getElementById('noBtn');
-noBtn.addEventListener('mouseenter',()=>{
-  const card = noBtn.parentElement;
-  const maxX = card.offsetWidth - noBtn.offsetWidth - 10;
-  const maxY = card.offsetHeight - noBtn.offsetHeight - 10;
-  const randomX = Math.random() * maxX;
-  const randomY = Math.random() * maxY;
-  noBtn.style.position='absolute';
-  noBtn.style.left=randomX+'px';
-  noBtn.style.top=randomY+'px';
-});
+function sayYes(){ nextPage(5); }
 
-// SAY YES
-function sayYes(){ nextPage(3); }
+const wittyPages = ['pageWitty1','pageWitty2','pageWitty3','pageWitty4','pageWitty5','pageWitty6'];
+let wittyIndex = 0;
+function autoAdvanceWitty(){
+  if(wittyIndex < wittyPages.length){
+    nextPage(wittyPages[wittyIndex]);
+    wittyIndex++;
+    setTimeout(autoAdvanceWitty,3000);
+  } else {
+    nextPage('pageWitty7');
+  }
+}
+
+document.querySelector("#page3 .btn").addEventListener('click', autoAdvanceWitty);
 </script>
 </body>
 </html>
