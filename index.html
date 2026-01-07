@@ -40,12 +40,11 @@ body {
 /* Envelope */
 #envelope {
   width: 80vw;
-  max-width: 500px;
+  max-width: 450px;
   height: 45vw;
-  max-height: 280px;
+  max-height: 250px;
   background: #8B0000;
   border: 2px solid #5A0000;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 50% 10%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -101,7 +100,7 @@ body {
 /* Envelope text */
 #envelope h1 {
   color: #fff;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   pointer-events: none;
   z-index: 3;
   text-align: center;
@@ -117,9 +116,9 @@ body {
   padding: 30px;
   text-align: center;
   box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-  transform: translateY(-150%);
-  transition: transform 1s ease, opacity 0.5s ease;
+  transform: translateY(-50px);
   opacity: 0;
+  transition: transform 0.6s ease, opacity 0.6s ease;
 }
 .card.show {
   transform: translateY(0);
@@ -207,56 +206,62 @@ p { font-size: 1rem; line-height: 1.6; margin-bottom: 15px; }
 <script>
 const music = document.getElementById('bgm');
 
+// Show page
 function nextPage(num){
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page'+num).classList.add('active');
+  const next = document.getElementById('page'+num);
+  next.classList.add('active');
+
+  // show card animation
+  const card = next.querySelector('.card');
+  if(card) setTimeout(()=>card.classList.add('show'), 100);
 }
 
-// Smooth fade-in music
-function fadeInMusic(audio, duration = 2000){
+// Fade-in music
+function fadeInMusic(audio, targetVolume=0.5, duration=2000){
   audio.volume = 0;
   audio.play();
-  const step = 0.02;
-  const interval = duration / (0.5/step);
-  const fade = setInterval(() => {
-    if(audio.volume < 0.5){
-      audio.volume = Math.min(audio.volume + step, 0.5);
+  const steps = 50;
+  let step = targetVolume / steps;
+  let interval = duration / steps;
+  let i = 0;
+  const fade = setInterval(()=>{
+    if(i<steps){
+      audio.volume = Math.min(audio.volume + step, targetVolume);
+      i++;
     } else {
       clearInterval(fade);
     }
   }, interval);
 }
 
-// Envelope animation
+// Open envelope
 function openCard(){
   const flap = document.querySelector("#envelope .flap");
   const shadow = document.querySelector("#envelope .flap-shadow");
   shadow.style.opacity = 1;
   flap.style.transform = "rotateX(180deg)";
-  fadeInMusic(music, 2000);
+  fadeInMusic(music,0.5,2000);
 
-  setTimeout(() => nextPage(2), 800);
-  setTimeout(() => document.getElementById('card1').classList.add('show'), 900);
+  setTimeout(()=>nextPage(2), 800);
 }
 
 // No button moves
 const noBtn = document.getElementById('noBtn');
-noBtn.addEventListener('mouseenter', () => {
+noBtn.addEventListener('mouseenter',()=>{
   const card = noBtn.parentElement;
-  const maxX = card.offsetWidth - noBtn.offsetWidth;
-  const maxY = card.offsetHeight - noBtn.offsetHeight;
+  const maxX = card.offsetWidth - noBtn.offsetWidth - 10;
+  const maxY = card.offsetHeight - noBtn.offsetHeight - 10;
   const randomX = Math.random() * maxX;
   const randomY = Math.random() * maxY;
-  noBtn.style.position = 'absolute';
-  noBtn.style.left = randomX + 'px';
-  noBtn.style.top = randomY + 'px';
+  noBtn.style.position='absolute';
+  noBtn.style.left=randomX+'px';
+  noBtn.style.top=randomY+'px';
 });
 
 // Say Yes
-function sayYes(){
-  nextPage(3);
-}
-</script>
+function sayYes(){ nextPage(3); }
 
+</script>
 </body>
 </html>
