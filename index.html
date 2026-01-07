@@ -5,19 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vintage Invitation</title>
 <style>
+/* ---------- BODY ---------- */
 body {
   margin: 0;
   font-family: "Segoe UI", Arial, Helvetica, sans-serif;
-  background: #000;
-  color: #8B0000;
-  overflow: hidden;
+  background: #1a1a1a;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  overflow: hidden;
+  perspective: 1200px; /* Needed for 3D flap */
 }
 
-/* Pages */
+/* ---------- PAGES ---------- */
 .page {
   position: absolute;
   top: 0;
@@ -29,7 +30,7 @@ body {
   align-items: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.6s ease;
+  transition: opacity 1s ease;
 }
 .page.active {
   opacity: 1;
@@ -37,102 +38,126 @@ body {
   z-index: 2;
 }
 
-/* Envelope */
-#envelope {
-  width: 80vw;
-  max-width: 450px;
-  height: 45vw;
-  max-height: 250px;
-  background: #8B0000;
-  border: 2px solid #5A0000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+/* ---------- ENVELOPE STACK ---------- */
+#envelope-wrapper {
   position: relative;
-  overflow: hidden;
+  width: 320px;
+  height: 200px;
+}
+
+/* Envelope stack for vintage effect */
+.envelope-stack {
+  position: absolute;
+  width: 300px;
+  height: 180px;
+  border-radius: 12px;
+  background: #9b3b2b;
+  border: 2px solid #6e1f14;
+  box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+  top: 0;
+  left: 0;
+  transform: translateY(var(--y, 0px)) scale(var(--s,1));
   transition: transform 0.4s ease;
+}
+
+/* Main envelope */
+#envelope {
+  position: relative;
+  width: 300px;
+  height: 180px;
+  background: #a03d2f;
+  border: 2px solid #6e1f14;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+  overflow: hidden;
+  transform-style: preserve-3d;
+  z-index: 5;
 }
 #envelope:hover { transform: scale(1.05); }
 
 /* Flap */
-#envelope .flap {
+#flap {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 50%;
-  background: #8B0000;
+  background: #a03d2f;
   clip-path: polygon(0 0, 100% 0, 50% 100%);
   transform-origin: top center;
-  transition: transform 0.8s ease;
-  z-index: 2;
-  box-shadow: inset 0 8px 15px rgba(0,0,0,0.2);
+  transition: transform 1s ease;
+  box-shadow: inset 0 8px 15px rgba(0,0,0,0.3);
+  z-index: 3;
+  transform: rotateX(0deg);
 }
 
 /* Flap shadow */
-#envelope .flap-shadow {
+#flap-shadow {
   position: absolute;
   top: 50%;
   left: 0;
   width: 100%;
   height: 50%;
   background: rgba(0,0,0,0.2);
-  z-index: 1;
   opacity: 0;
   transition: opacity 0.5s ease;
   pointer-events: none;
+  z-index: 2;
 }
 
 /* Stamp */
-#envelope .stamp {
+.stamp {
   position: absolute;
-  top: 10%;
+  top: 12%;
   right: 8%;
-  width: 12%;
-  height: 25%;
+  width: 14%;
+  height: 28%;
   border-radius: 50%;
   border: 2px dashed #fff;
+  background: #fff2;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  z-index: 4;
 }
 
 /* Envelope text */
 #envelope h1 {
+  position: relative;
   color: #fff;
-  font-size: 1.4rem;
-  pointer-events: none;
-  z-index: 3;
+  font-size: 1.3rem;
   text-align: center;
+  pointer-events: none;
+  z-index: 4;
+  margin-top: 60px;
 }
 
-/* Card */
+/* ---------- CARD ---------- */
 .card {
-  background: #fff;
-  color: #000;
-  border-radius: 12px;
+  background: #fff8f0;
+  color: #4b1e0b;
+  border-radius: 15px;
   width: 80vw;
   max-width: 400px;
   padding: 30px;
   text-align: center;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-  transform: translateY(-50px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  transform: translateY(50px);
   opacity: 0;
-  transition: transform 0.6s ease, opacity 0.6s ease;
+  transition: transform 0.8s ease, opacity 0.8s ease;
 }
 .card.show {
   transform: translateY(0);
   opacity: 1;
 }
 
-h1 { color: #8B0000; font-size: 1.6rem; margin-bottom: 15px; font-weight: 600; }
+h1 { font-size: 1.7rem; margin-bottom: 15px; }
 p { font-size: 1rem; line-height: 1.6; margin-bottom: 15px; }
 .btn {
   padding: 10px 25px;
   border-radius: 25px;
   border: none;
   font-size: 1rem;
-  background: #8B0000;
+  background: #a03d2f;
   color: #fff;
   cursor: pointer;
   margin-top: 15px;
@@ -149,75 +174,83 @@ p { font-size: 1rem; line-height: 1.6; margin-bottom: 15px; }
 </head>
 <body>
 
-<!-- Page 1: Envelope -->
+<!-- PAGE 1: ENVELOPE -->
 <section class="page active" id="page1">
-  <div id="envelope" onclick="openCard()">
-    <div class="flap"></div>
-    <div class="flap-shadow"></div>
-    <div class="stamp"></div>
-    <h1>Click to Open</h1>
+  <div id="envelope-wrapper">
+    <!-- Stacked envelopes for vintage effect -->
+    <div class="envelope-stack" style="--y:8px; --s:0.96;"></div>
+    <div class="envelope-stack" style="--y:16px; --s:0.92;"></div>
+    <div class="envelope-stack" style="--y:24px; --s:0.88;"></div>
+
+    <!-- Main interactive envelope -->
+    <div id="envelope" onclick="openCard()">
+      <div id="flap"></div>
+      <div id="flap-shadow"></div>
+      <div class="stamp"></div>
+      <h1>💌 Click to Open 💌</h1>
+    </div>
   </div>
 </section>
 
-<!-- Page 2: Card -->
+<!-- PAGE 2: CARD -->
 <section class="page" id="page2">
   <div class="card" id="card1">
-    <h1>Hi Love</h1>
-    <p>May I take you out on a date? I have been wanting to share this moment with you, and I hope this will be the start of us choosing each other.</p>
-    <button class="btn" onclick="sayYes()">Yes</button>
-    <button class="btn" id="noBtn">No</button>
+    <h1>Hi Love 😘</h1>
+    <p>May I take you out on a date? 🌸 I’ve been wanting to share this moment with you, and I hope this will be the start of us choosing each other 💖</p>
+    <button class="btn" onclick="sayYes()">Yes 💕</button>
+    <button class="btn" id="noBtn">No 😅</button>
   </div>
 </section>
 
-<!-- Page 3: Celebration -->
+<!-- PAGE 3: CELEBRATION -->
 <section class="page" id="page3">
   <div class="card">
-    <h1>YAAAY</h1>
-    <p>Thank you for letting me take you out. I truly appreciate it and I can’t wait to spend this time together.</p>
-    <button class="btn" onclick="nextPage(4)">Next</button>
+    <h1>YAAAY 🎉</h1>
+    <p>Thank you for letting me take you out 🥰 I can’t wait to spend this time together ❤️</p>
+    <button class="btn" onclick="nextPage(4)">Next ➡️</button>
   </div>
 </section>
 
-<!-- Page 4: Details -->
+<!-- PAGE 4: DETAILS -->
 <section class="page" id="page4">
   <div class="card">
-    <h1>The Details</h1>
-    <p><strong>Dress code:</strong> White top & blue pants/skirt</p>
-    <p><strong>Time:</strong> 4:00 PM</p>
-    <p><strong>Place:</strong> Roof Manila</p>
-    <button class="btn" onclick="nextPage(5)">Next</button>
+    <h1>The Details 📅</h1>
+    <p><strong>Dress code:</strong> White top & blue pants/skirt 👗👔</p>
+    <p><strong>Time:</strong> 4:00 PM ⏰</p>
+    <p><strong>Place:</strong> Roof Manila 🌆</p>
+    <button class="btn" onclick="nextPage(5)">Next ➡️</button>
   </div>
 </section>
 
-<!-- Page 5: Final Message -->
+<!-- PAGE 5: FINAL MESSAGE -->
 <section class="page" id="page5">
   <div class="card">
-    <h1>Can’t Wait</h1>
-    <p>I’m excited to see you and spend time together. I love you.</p>
-    <p>01.11.2026</p>
+    <h1>Can’t Wait ❤️</h1>
+    <p>I’m excited to see you and spend time together 💕</p>
+    <p>01.11.2026 📅</p>
   </div>
 </section>
 
-<!-- Background Music -->
+<!-- BACKGROUND MUSIC -->
 <audio id="bgm" loop>
   <source src="wishlist-instrumental.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 const music = document.getElementById('bgm');
+const flap = document.getElementById('flap');
+const flapShadow = document.getElementById('flap-shadow');
 
-// Show page
+// PAGE TRANSITIONS
 function nextPage(num){
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const next = document.getElementById('page'+num);
   next.classList.add('active');
-
-  // show card animation
   const card = next.querySelector('.card');
-  if(card) setTimeout(()=>card.classList.add('show'), 100);
+  if(card) setTimeout(()=>card.classList.add('show'), 150);
 }
 
-// Fade-in music
+// FADE IN MUSIC
 function fadeInMusic(audio, targetVolume=0.5, duration=2000){
   audio.volume = 0;
   audio.play();
@@ -229,24 +262,19 @@ function fadeInMusic(audio, targetVolume=0.5, duration=2000){
     if(i<steps){
       audio.volume = Math.min(audio.volume + step, targetVolume);
       i++;
-    } else {
-      clearInterval(fade);
-    }
+    } else clearInterval(fade);
   }, interval);
 }
 
-// Open envelope
+// OPEN ENVELOPE WITH 3D FLAP
 function openCard(){
-  const flap = document.querySelector("#envelope .flap");
-  const shadow = document.querySelector("#envelope .flap-shadow");
-  shadow.style.opacity = 1;
-  flap.style.transform = "rotateX(180deg)";
+  flapShadow.style.opacity = 1;
+  flap.style.transform = "rotateX(-180deg)"; // flap folds back
   fadeInMusic(music,0.5,2000);
-
-  setTimeout(()=>nextPage(2), 800);
+  setTimeout(()=>nextPage(2), 900);
 }
 
-// No button moves
+// NO BUTTON ESCAPE
 const noBtn = document.getElementById('noBtn');
 noBtn.addEventListener('mouseenter',()=>{
   const card = noBtn.parentElement;
@@ -259,9 +287,8 @@ noBtn.addEventListener('mouseenter',()=>{
   noBtn.style.top=randomY+'px';
 });
 
-// Say Yes
+// SAY YES
 function sayYes(){ nextPage(3); }
-
 </script>
 </body>
 </html>
